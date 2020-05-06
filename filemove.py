@@ -10,15 +10,18 @@ if __name__ == "__main__":
     my_event_handler = PatternMatchingEventHandler(patterns, ignore_patterns, ignore_directories, case_sensetive)
 
 endings = ["txt", "pdf", "mp3", "exe", "zip"]
-newFolder = ["txt Folder", "pdf Folder", "mp3 Folder", "exe Folder", "zip Folder"]
+newFolder = [r"\Txt Folder", r"\pdf Folder", r"\mp3 Folder", r"\exe Folder", r"\zip Folder"]
 
 def on_created(event): #prints the Name/Path of the new File and creates a Folder for it if it doesn't yet exist
     print(f"Hey, {event.src_path} has been created!")
-    if str(event.src_path).endswith("txt"):
-        newpath = r"E:\Chrome Downloads\Txt Files"
-        if not os.path.exists(newpath):
-            os.makedirs(newpath)
-        shutil.move(str(event.src_path), str(newpath +r"\Textdokument 1.txt"))
+    time.sleep(3)
+    basename = os.path.basename(str(event.src_path))
+    for i in range(len(endings)):
+        if str(event.src_path).endswith(endings[i]):
+            newpath = r"E:\Chrome Downloads" + newFolder[i]
+            if not os.path.exists(newpath):
+                os.makedirs(newpath)
+            shutil.move(str(event.src_path), str(newpath + "/" + basename))
 
 my_event_handler.on_created = on_created
 
